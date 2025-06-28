@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+{% load custom_tags %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <!-- Post -->
+         {% for post in posts%}
+        <div class="col-md-6 offset-md-3 mb-4">
+            <div class="card">
+                <h5 class="card-title" style="padding-top: 10px;padding-left: 10px;">{{post.user.username}}</h5>
+                <a href="{% url 'view_post' post.id %}"><img src="{{post.post.url}}" class="card-img-top post-img fix-post-img" alt="Post Image"></a>
+                <div class="card-body">
+                    <p class="card-text">{{post.caption}}</p>
+                    <div class="post-actions">
+                        <a href="{% url 'like_view' post.id %}" class="like-btn anchor">{{post.likes.all.count}}
+                            {% if post|is_liked:request.user %}
+                            <i class="fa fa-heart fa-lg" aria-hidden="true" style="color: red;"></i>
+                            {% else %}
+                            <i class="fa fa-heart-o fa-lg" aria-hidden="true"></i>
+                            {% endif %}
+                        </a>
+                        <a href="{% url 'view_post' post.id %}" class="comment-btn anchor" style="padding-left: 10px;">{{post.comments.all.count}} <i class="fa fa-comment-o" aria-hidden="true"></i></i></a>
+                        <a href="{% url 'save_view' post.id %}" class="save-btn anchor" style="float: inline-end;">
+                            {% if post|is_saved:request.user %}
+                            <i class="fa fa-bookmark fa-lg" aria-hidden="true" style="color: black;"></i>
+                            {% else %}
+                            <i class="fa fa-bookmark-o fa-lg" aria-hidden="true"></i>
+                            {% endif %}
+                        </a>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- Add more posts as needed -->
+    </div>
+</div>
+{% endblock %}
